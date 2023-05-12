@@ -4,7 +4,7 @@ import 'package:academy_app/constants.dart';
 import 'package:academy_app/models/common_functions.dart';
 import 'package:academy_app/providers/auth.dart';
 import 'package:academy_app/screens/forgot_password_screen.dart';
-// import 'package:academy_app/screens/signup_screen.dart';
+import 'package:academy_app/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -86,9 +86,19 @@ class _AuthScreenState extends State<AuthScreen> {
     }
     globalFormKey.currentState!.save();
 
+    print('object');
+
     setState(() {
       _isLoading = true;
     });
+
+    // // TODO: The following is condition is for testing only
+    // if (true) {
+    //   Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
+    //   CommonFunctions.showSuccessToast('تم تسجيل الدخول بنجاح');
+    //   return;
+    // }
+
     try {
       // Log user in
       await Provider.of<Auth>(context, listen: false).login(
@@ -184,11 +194,11 @@ class _AuthScreenState extends State<AuthScreen> {
                             ),
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
-                            validator: (input) =>
-                                !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
-                                        .hasMatch(input!)
-                                    ? "يجب أن يكون معرف البريد الإلكتروني صالحًا"
-                                    : null,
+                            validator: (input) => !RegExp(
+                                        r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                                    .hasMatch(input!)
+                                ? "يجب أن يكون معرف البريد الإلكتروني صالحًا"
+                                : null,
                             onSaved: (value) {
                               _authData['email'] = value.toString();
                               _emailController.text = value as String;
@@ -320,6 +330,35 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ),
                         ),
                         const SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15, right: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'هل ليس لديك حساب؟',
+                                style: TextStyle(
+                                  color: kTextLowBlackColor,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .pushReplacementNamed(SignUpScreen.routeName);
+                                },
+                                child: const Text(
+                                  ' إنشاء حساب',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),

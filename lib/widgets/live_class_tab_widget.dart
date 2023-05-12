@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:academy_app/models/live_class_model.dart';
 import 'package:academy_app/providers/shared_pref_helper.dart';
+import 'package:academy_app/screens/video_conferance_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../constants.dart';
@@ -58,7 +59,12 @@ class _LiveClassTabWidgetState extends State<LiveClassTabWidget> {
           );
         } else {
           if (dataSnapshot.error != null) {
-            //error
+            /*
+            Note: the returned value from Postman is empty as following.
+              zoom_live_class_details	[]
+              zoom_api_key	""
+              zoom_secret_key	""
+            */
             return Column(
               children: [
                 Padding(
@@ -129,8 +135,7 @@ class _LiveClassTabWidgetState extends State<LiveClassTabWidget> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8.0, vertical: 8.0),
                       child: Text(
-                        dataSnapshot.data!.zoomLiveClassDetails!.noteToStudents
-                            .toString(),
+                        dataSnapshot.data!.zoomLiveClassDetails!.noteToStudents.toString(),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 15,
@@ -143,12 +148,20 @@ class _LiveClassTabWidgetState extends State<LiveClassTabWidget> {
                 ),
                 ElevatedButton.icon(
                   onPressed: () async {
-                    final token = await SharedPreferenceHelper().getAuthToken();
-                    final url =
-                        '$BASE_URL/api/zoom_mobile_web_view/${widget.courseId}/$token';
-                    // print(_url);
+                    
+                    // >> zoomApi and zoomSec is not working, so that we will use another way <<
+                    
+                    // final token = await SharedPreferenceHelper().getAuthToken();
+                    // final url =
+                    //     '$BASE_URL/api/zoom_mobile_web_view/${widget.courseId}/$token';
+                    // Navigator.of(context)
+                    //    .pushNamed(WebViewScreen.routeName, arguments: url);
+
+
+                    // The other way
+                    myMeetingId = widget.courseId.toString();
                     Navigator.of(context)
-                        .pushNamed(WebViewScreen.routeName, arguments: url);
+                        .pushNamed(VideoConferancePage.routeName);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
